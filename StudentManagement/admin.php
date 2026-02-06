@@ -83,7 +83,7 @@ if ($filter_dept !== "") {
     <a href="update_data.php?student_number=<?= $student['student_number'] ?>" class="btn btn-update">Edit</a>
     <a href="delete_student.php?student_number=<?= $student['student_number'] ?>" 
        class="btn btn-remove" 
-       onclick="return confirm('Archive this record?');">Delete</a>
+       click="return confirm('Delete this student?');">Delete</a>
     <a href="insert.html" class="btn btn-add" style="margin-left:8px;">Add</a>
 </td>
             </tr>
@@ -94,4 +94,5 @@ if ($filter_dept !== "") {
 <?php mysqli_close($connection); ?>
 
 </body>
+
 </html>
