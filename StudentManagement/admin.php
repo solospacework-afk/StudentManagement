@@ -12,6 +12,27 @@ $user_session = $_COOKIE['username'];
 // Handle Department Sorting
 $filter_dept = $_GET['department'] ?? "";
 
+
+// Update all students department
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_all'])) {
+
+    $new_department = $_POST['new_department'];
+
+    if (!empty($new_department)) {
+
+        $update_query = "UPDATE students SET department = ?";
+        $stmt = mysqli_prepare($connection, $update_query);
+        mysqli_stmt_bind_param($stmt, "s", $new_department);
+        mysqli_stmt_execute($stmt);
+
+        // Refresh page after update
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
+    }
+}
+
+
+
 // Retrieve Student Data
 if ($filter_dept !== "") {
     $query = "SELECT * FROM students WHERE department = ?";
@@ -58,6 +79,32 @@ if ($filter_dept !== "") {
 <hr>
 
 
+<div class="filter-section">
+    <form method="POST">
+        <label><strong>Update all students departments :</strong></label>
+        
+        <select name="new_department" required>
+    <option value="">-- Select Department --</option>
+    <option value="Computer Science">Computer Science</option>
+    <option value="Information Technology">Information Technology</option>
+    <option value="Software Engineering">Software Engineering</option>
+    <option value="Information Systems">Information Systems</option>
+    <option value="Business Administration">Business Administration</option>
+    <option value="Computer Engineering">Computer Engineering</option>
+    <option value="Data Science">Data Science</option>
+    <option value="Cyber Security">Cyber Security</option>
+    <option value="Business Information Systems">Business Information Systems</option>
+    <option value="Artificial Intelligence">Artificial Intelligence</option>
+</select>
+
+        <button type="submit" name="update_all" class="btn btn-update">
+            Update All
+        </button>
+    </form>
+</div>
+
+
+
 <table class="main-table">
     <thead>
         <tr>
@@ -83,7 +130,7 @@ if ($filter_dept !== "") {
     <a href="update_data.php?student_number=<?= $student['student_number'] ?>" class="btn btn-update">Edit</a>
     <a href="delete_student.php?student_number=<?= $student['student_number'] ?>" 
        class="btn btn-remove" 
-       click="return confirm('Delete this student?');">Delete</a>
+       onclick="return confirm('Delete this student?');">Delete</a>
     <a href="insert.html" class="btn btn-add" style="margin-left:8px;">Add</a>
 </td>
             </tr>
@@ -94,5 +141,4 @@ if ($filter_dept !== "") {
 <?php mysqli_close($connection); ?>
 
 </body>
-
 </html>
